@@ -1,0 +1,18 @@
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.seat.enable {
+    background-color: gray;
+}
+
+.seat.disable{
+    background-color: deepskyblue;
+}
+
+.line{
+    display:flex;
+}
