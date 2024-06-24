@@ -75,4 +75,12 @@ io.sockets.on('connection', (socket) => {
         selectSeats[y][x] = 2;
         io.sockets.emit('reRender', data);
     })
+
+    socket.on('cancel', (data) => {
+        console.log('취소')
+        const { selectIndex: {x , y}, index} = data;
+        const selectSeats = seats[index];
+        selectSeats[y][x] = 1;
+        io.sockets.emit('reRender2', data);
+    })
 })

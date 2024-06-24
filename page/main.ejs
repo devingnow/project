@@ -29,7 +29,7 @@
             const target = document.querySelector(`div[data-x='${x}'][data-y ='${y}']`)
             target.classList.add('disable');
             target.classList.remove('enable');
-            target.onclick = null;
+            target.onclick = handlerClickSeat2;
         }
         // const target = document.querySelectorAll('.seat');
         // const {selectIndex} = data
@@ -38,7 +38,18 @@
         // target[selectIndex].onclick = null;
     })
 
+    socket.on('reRender2', (data) => {
+        if(data.index === selectIndex){
+            const {selectIndex : {x, y}} = data;
+            const target = document.querySelector(`div[data-x='${x}'][data-y ='${y}']`)
+            target.classList.add('enable');
+            target.classList.remove('disable');
+            target.onclick = handlerClickSeat;
+        }
+    })
+
     const popup = new Popup("예매 하시겠습니까?");
+    const popup2 = new Popup("취소 하시겠습니까?");
 
     const handlerclickBtn2 = () => {
         console.log('취소')
@@ -52,6 +63,16 @@
             socket.emit('reserve', {selectIndex : {x, y}, index: selectIndex});
         }
         popup.addEventListener(handlerclickBtn, handlerclickBtn2)
+    } 
+
+    const handlerClickSeat2 = (e) => {
+        popup2.open();
+        const x = e.target.getAttribute('data-x')
+        const y = e.target.getAttribute('data-y')
+        const handlerclickBtn  = () => {
+            socket.emit('cancel', {selectIndex : {x, y}, index: selectIndex});
+        }
+        popup2.addEventListener(handlerclickBtn, handlerclickBtn2)
     } 
 
     const renderSeats = async (index) => {
@@ -73,6 +94,7 @@
                     seatElement.onclick = (e) => { handlerClickSeat(e) };
                 }else if(e === 2){
                     seatElement.classList.add('disable')
+                    seatElement.onclick = (e) => { handlerClickSeat2(e) };
                 }
                 
                 lineElement.append(seatElement)
